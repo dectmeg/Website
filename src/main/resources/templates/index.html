@@ -3,7 +3,7 @@
     <main class="container-fluid  m-0 p-0" th:fragment="content">
         <link href="/css/index.css" rel="stylesheet">
         <div class="row">
-            <div class="col-lg-8 col-md-12 pb-md-2">
+            <div class="col-lg-12 col-md-12 pb-md-2">
                 <div id="carouselExample" class="carousel slide">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
@@ -29,102 +29,111 @@
                     </button>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-12 ">
-                <!-- News and Notices Section -->
-                <div class="card">
-                    <div class="card-header">
-                        <h3>News and Notices</h3>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-4 py-3">
+                        <div class="card">
+                            <a href="/citizenservices" class="text-decoration-none">
+                                <div class="card-body">
+                                    <div class="row py-3">
+                                        <div class="col-3">
+                                            <img src="/images/user.png" alt="business icon" class="img-fluid my-auto w-70">
+                                        </div>
+                                        <div class="col-9">
+                                            <h4>Registration</h4>
+                                            Online registration of applicant in Employment Exchange
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
                     </div>
-                    <div class="card-body">
-
-                        <!-- News Item 1 -->
-                        <div class="mb-4">
-                            <p class="text-muted small">December 4, 2023</p>
-                            <h6 class="card-title">Important Announcement</h6>
-                            <p class="card-text small">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante...</p>
+                    <div class="col-md-4 py-3">
+                        <div class="card">
+                            <a href="/businessservices" class="text-decoration-none">
+                                <div class="card-body">
+                                    <div class="row py-3">
+                                        <div class="col-3">
+                                            <img src="/images/user_renew.png" alt="business icon" class="img-fluid my-auto">
+                                        </div>
+                                        <div class="col-9">
+                                            <!--                                    <span class="d-inline-block mb-1 ms-3 w-100 fs-1 fw-bold" th:text="${totalBusinessService}">185</span>-->
+                                            <h4 >Renewal</h4>
+                                            Online renewal of applicants in Employment Exchange
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-
-                        <!-- News Item 2 -->
-                        <div class="mb-4">
-                            <p class="text-muted small">December 2, 2023</p>
-                            <h6 class="card-title">Upcoming Event</h6>
-                            <p class="card-text small">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...</p>
+                    </div>
+                    <div class="col-md-4 py-3">
+                        <div class="card">
+                            <a href="/businessservices" class="text-decoration-none">
+                                <div class="card-body">
+                                    <div class="row py-3">
+                                        <div class="col-3">
+                                            <img src="/images/employer.png" alt="business icon" class="img-fluid my-auto">
+                                        </div>
+                                        <div class="col-9">
+                                            <!--                                    <span class="d-inline-block mb-1 ms-3 w-100 fs-1 fw-bold" th:text="${totalOtherService}">18</span>-->
+                                            <h4 class="">Employer</h4>
+                                            Online registration of Employers in Employment Exchange
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                        <div class="mb-4">
-                            <p class="text-muted small">December 2, 2023</p>
-                            <h6 class="card-title">Upcoming Event</h6>
-                            <p class="card-text small">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...</p>
-                        </div>
-
-                        <!-- Add more news items as needed -->
-
-                        <!-- View More Button -->
-                        <div class="text-center mt-4">
-                            <button class="btn btn-primary">View More</button>
-                        </div>
-
                     </div>
                 </div>
+            </div>
+                <div class="col-lg-4 col-md-12 py-3">
+                    <!-- News and Notices Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>News and Notices</h3>
+                        </div>
+                        <div class="card-body">
+
+                            <!-- News Item 1 -->
+                            <div class="mb-4">
+                                <p class="text-muted small">December 4, 2023</p>
+                                <h6 class="card-title">Important Announcement</h6>
+                                <p class="card-text small">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante...</p>
+                            </div>
+
+                            <!-- News Item 2 -->
+                            <div class="mb-4">
+                                <p class="text-muted small">December 2, 2023</p>
+                                <h6 class="card-title">Upcoming Event</h6>
+                                <p class="card-text small">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...</p>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-muted small">December 2, 2023</p>
+                                <h6 class="card-title">Upcoming Event</h6>
+                                <p class="card-text small">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam...</p>
+                            </div>
+
+                            <!-- Add more news items as needed -->
+
+                            <!-- View More Button -->
+                            <div class="text-center mt-4">
+                                <button class="btn btn-primary">View More</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
         </div>
 
 
-        <div class="row py-4  primary-pattern">
-            <div class="col-md-4 py-3">
-                <div class="card">
-                    <a href="/citizenservices" class="text-decoration-none">
-                        <div class="card-body">
-                            <div class="row py-3">
-                                <div class="col-3">
-                                    <img src="/images/user.png" alt="business icon" class="img-fluid my-auto w-70">
-                                </div>
-                                <div class="col-9">
-                                    <h4>Registration</h4>
-                                    Online registration of applicant in Employment Exchange
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-4 py-3">
-                <div class="card">
-                    <a href="/businessservices" class="text-decoration-none">
-                        <div class="card-body">
-                            <div class="row py-3">
-                                <div class="col-3">
-                                    <img src="/images/user_renew.png" alt="business icon" class="img-fluid my-auto">
-                                </div>
-                                <div class="col-9">
-<!--                                    <span class="d-inline-block mb-1 ms-3 w-100 fs-1 fw-bold" th:text="${totalBusinessService}">185</span>-->
-                                    <h4 >Renewal</h4>
-                                    Online renewal of applicants in Employment Exchange
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-md-4 py-3">
-                <div class="card">
-                    <a href="/businessservices" class="text-decoration-none">
-                        <div class="card-body">
-                            <div class="row py-3">
-                                <div class="col-3">
-                                    <img src="/images/employer.png" alt="business icon" class="img-fluid my-auto">
-                                </div>
-                                <div class="col-9">
-<!--                                    <span class="d-inline-block mb-1 ms-3 w-100 fs-1 fw-bold" th:text="${totalOtherService}">18</span>-->
-                                    <h4 class="">Employer Registration</h4>
-                                    Online registration of Employers in Employment Exchange
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
 
-            <div class="row py-4  primary-pattern">
+
+
+            <div class="row py-4">
                 <div class="col-md-4 py-3">
                     <div class="card bg-danger bg-gradient text-white">
                         <div class="card-body">
