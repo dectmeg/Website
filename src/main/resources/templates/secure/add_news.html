@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/adminlayout.html}">
+
+<main class="container-fluid" th:fragment="content">
+
+    <div class="card mt-3 bg-white">
+        <div class="card-header">
+
+            <div class="card-title ">
+                News & Notices
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                    Add News/Notice
+                </button>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add News/Notice</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addNewsForm" enctype="multipart/form-data">
+                                <label for="newsType">News Type:</label>
+                                <select class="form-control" id="newsType" name="newsType" required></select>
+                                <div class="form-group my-3">
+                                    <label for="title">Title:</label>
+                                    <input type="text" class="form-control" id="title" name="title" required/>
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="description">Description:</label>
+                                    <textarea id="description" name="description" required></textarea>
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="date">Date:</label>
+                                    <input type="date" class="form-control" id="date" name="date"
+                                           placeholder="YYYY-MM-DD" required/>
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="attachment">Attachment:</label>
+                                    <input type="file" class="form-control" id="attachment" name="attachment"/>
+                                </div>
+
+                                <div class="text-center mt-5">
+                                    <button type="button" class="btn btn-primary" id="save-news"> Save News
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Slno</th>
+                    <th>Type</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Attatchment</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="newsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+        console.log("klhkdsjf")
+
+            // Function to populate the news type dropdown
+            function populateNewsTypeDropdown() {
+                var newsTypeSelect = $('#newsType');
+
+                // Make an AJAX request to fetch the news types
+                $.ajax({
+                    url: '/secure/news/types',
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response)
+                        // Add the default option (disabled and selected)
+                        newsTypeSelect.append($('<option></option>')
+                            .attr('value', '')
+                            .text('- Select News Type - ')
+                            .prop('disabled', true)
+                            .prop('selected', true));
+
+                        // Add the news types from the response
+                        response.forEach(function(newsType) {
+                            newsTypeSelect.append($('<option></option>')
+                                .val(newsType.id)
+                                .text(newsType.name));
+                        });
+                    },
+                    error: function() {
+                        console.error('Error fetching news types.');
+                    }
+                });
+            }
+
+            // Call the function to populate the dropdown
+            populateNewsTypeDropdown();
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#description').summernote({
+                height: 80,
+                minHeight: null,
+                maxHeight: null,
+                focus: true
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function() {
+            $("#save-news").click(function() {
+                var title = $("#title").val();
+                var description = $("#description").val();
+                var date = $("#date").val();
+                var attachment = $("#attachment")[0].files[0];
+                var newsType = $('#newsType option:selected').val();
+
+                var formData = new FormData($("#addNewsForm")[0]);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/secure/news/add",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    enctype: 'multipart/form-data',
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'News Saved Successfully!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                        setTimeout(function() {
+                            window.location.href = '/secure/news';
+                        }, 2000);
+                    },
+                    error: function(error) {
+                        console.error('Error adding news:', error.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Failed to save news. Please try again.',
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+<script>
+    $(document).ready(function() {
+    // Function to populate the table with news data
+    function populateNewsTable(newsList) {
+    var tableBody = $('#newsTableBody');
+    tableBody.empty(); // Clear existing rows
+
+    $.each(newsList, function(index, news) {
+    var row = '<tr>' +
+        '<td>' + (index + 1) + '</td>' +
+        '<td>' + news.newsType.name + '</td>' +
+        '<td>' + news.title + '</td>' +
+        '<td>' + news.description + '</td>' +
+        '<td>' + news.date + '</td>' +
+        '<td>' +
+            // Check if fileLocation exists before displaying it
+            (news.fileLocation ? '<a href="/secure/news/attachment/' + news.id + '" target="_blank">View Attachment</a>' : 'No Attachment') +
+        '</td>' +
+        '<td><button class="btn btn-danger" onclick="deleteNews(' + news.id + ')"><i class="fa fa-trash"></i></button></td>' +
+    '</tr>';
+    tableBody.append(row);
+});
+
+    }
+
+    // Function to fetch news data using AJAX
+    function fetchNewsData() {
+    $.ajax({
+    url: '/news/all',
+    method: 'GET',
+    success: function(response) {
+    console.log(response);
+    populateNewsTable(response);
+    },
+    error: function() {
+    console.error('Error fetching news data.');
+    }
+    });
+    }
+
+    fetchNewsData();
+    });
+
+    </script>
+
+</main>
+</html>

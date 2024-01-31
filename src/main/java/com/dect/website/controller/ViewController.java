@@ -96,7 +96,6 @@ public class ViewController {
 
     @GetMapping("/secure/news")
     public String showAdminNews() {
-        return "secure/news";
+        return "secure/add_news";
     }
-
 }

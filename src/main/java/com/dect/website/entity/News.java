@@ -21,5 +21,13 @@ public class News {
     @Temporal(TemporalType.DATE)
     private Date date;
 
-    private byte[] attachment;
+    @Column(name = "attachment_name")
+    private String attachmentName;
+
+    @Column(name = "file_location")
+    private String fileLocation;
+
+    @ManyToOne
+    @JoinColumn(name = "news_type_id")
+    private NewsType newsType;
 }
