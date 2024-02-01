@@ -80,10 +80,6 @@ public class ViewController {
     public String showAdminDashboard() {
         return "secure/dashboard";
     }
-    @GetMapping("/secure/home")
-    public String showAdminHome() {
-        return "secure/home";
-    }
 
     @GetMapping("/secure/services")
     public String showAdminServices() {

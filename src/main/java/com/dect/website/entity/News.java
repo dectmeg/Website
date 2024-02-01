@@ -22,12 +22,12 @@ public class News {
     private Date date;
 
     @Column(name = "attachment_name")
-    private String attachmentName;
-
-    @Column(name = "file_location")
-    private String fileLocation;
+    private String attachmentName;  // Only store the file name in the database
 
     @ManyToOne
     @JoinColumn(name = "news_type_id")
     private NewsType newsType;
+
+    @Column(name = "whats_new", nullable = false)
+    private boolean whatsNew;
 }

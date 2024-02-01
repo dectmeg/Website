@@ -49,6 +49,10 @@
                                     <label for="attachment">Attachment:</label>
                                     <input type="file" class="form-control" id="attachment" name="attachment"/>
                                 </div>
+                                <div class="form-check my-3">
+                                    <input type="checkbox" class="form-check-input" id="whatsNew" name="whatsNew" checked/>
+                                    <label class="form-check-label" for="whatsNew">Add to What's New ?</label>
+                                </div>
 
                                 <div class="text-center mt-5">
                                     <button type="button" class="btn btn-primary" id="save-news"> Save News
@@ -85,7 +89,6 @@
 
     <script>
         $(document).ready(function() {
-        console.log("klhkdsjf")
 
             // Function to populate the news type dropdown
             function populateNewsTypeDropdown() {
@@ -143,8 +146,11 @@
                 var date = $("#date").val();
                 var attachment = $("#attachment")[0].files[0];
                 var newsType = $('#newsType option:selected').val();
+                var whatsNew = $("#whatsNew").is(":checked");
 
                 var formData = new FormData($("#addNewsForm")[0]);
+
+                formData.set('whatsNew', whatsNew ? "true" : "false");
 
                 $.ajax({
                     type: "POST",
@@ -177,50 +183,51 @@
             });
         });
     </script>
-<script>
-    $(document).ready(function() {
-    // Function to populate the table with news data
-    function populateNewsTable(newsList) {
-    var tableBody = $('#newsTableBody');
-    tableBody.empty(); // Clear existing rows
+    <script>
+        $(document).ready(function() {
+            // Function to populate the table with news data
+            function populateNewsTable(newsList) {
+                var tableBody = $('#newsTableBody');
+                tableBody.empty(); // Clear existing rows
 
-    $.each(newsList, function(index, news) {
-    var row = '<tr>' +
-        '<td>' + (index + 1) + '</td>' +
-        '<td>' + news.newsType.name + '</td>' +
-        '<td>' + news.title + '</td>' +
-        '<td>' + news.description + '</td>' +
-        '<td>' + news.date + '</td>' +
-        '<td>' +
-            // Check if fileLocation exists before displaying it
-            (news.fileLocation ? '<a href="/secure/news/attachment/' + news.id + '" target="_blank">View Attachment</a>' : 'No Attachment') +
-        '</td>' +
-        '<td><button class="btn btn-danger" onclick="deleteNews(' + news.id + ')"><i class="fa fa-trash"></i></button></td>' +
-    '</tr>';
-    tableBody.append(row);
-});
+                $.each(newsList, function(index, news) {
+                    var row = '<tr>' +
+                        '<td>' + (index + 1) + '</td>' +
+                        '<td>' + news.newsType.name + '</td>' +
+                        '<td>' + news.title + '</td>' +
+                        '<td>' + news.description + '</td>' +
+                        '<td>' + news.date + '</td>' +
+                        '<td>' +
+                            (news.attachmentName ? '<a href="' + getAttachmentUrl(news.id) + '" target="_blank">View Attachment</a>' : 'No Attachment') +
+                        '</td>' +
+                        '<td><button class="btn btn-danger" onclick="deleteNews(' + news.id + ')"><i class="fa fa-trash"></i></button></td>' +
+                    '</tr>';
+                    tableBody.append(row);
+                });
+            }
 
-    }
+            function getAttachmentUrl(newsId) {
+                return '/news/attachment/' + newsId;
+            }
 
-    // Function to fetch news data using AJAX
-    function fetchNewsData() {
-    $.ajax({
-    url: '/news/all',
-    method: 'GET',
-    success: function(response) {
-    console.log(response);
-    populateNewsTable(response);
-    },
-    error: function() {
-    console.error('Error fetching news data.');
-    }
-    });
-    }
+            function fetchNewsData() {
+                $.ajax({
+                    url: '/news/all',
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        populateNewsTable(response);
+                    },
+                    error: function() {
+                        console.error('Error fetching news data.');
+                    }
+                });
+            }
 
-    fetchNewsData();
-    });
-
+            fetchNewsData();
+        });
     </script>
+
 
 </main>
 </html>
