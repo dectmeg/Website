@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/adminlayout.html}">
+
+<main class="container-fluid" th:fragment="content">
+
+    <div class="card mt-3 bg-white">
+        <div class="card-header">
+
+            <div class="card-title ">
+                Notifications and Tenders
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                    Add New Notification
+                </button>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Add Notification</h4>
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                                    aria-label="Close">X
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addNewsForm" enctype="multipart/form-data">
+                                <label for="newsType"><span class="text-danger">*</span>Attachment Type:</label>
+                                <select class="form-control" id="newsType" name="newsType" required>
+                                    <option>Tender</option>
+                                    <option>Notice</option>
+                                    <option>Others</option>
+                                </select>
+                                <div class="form-group my-3">
+                                    <label for="title"><span class="text-danger">*</span>Title:</label>
+                                    <input type="text" class="form-control" id="title" name="title" required/>
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="description"><span class="text-danger">*</span>Description:</label>
+                                    <textarea id="description" name="description" required></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="form-group my-3">
+                                            <label for="enddate">End Date:</label>
+                                            <input type="date" class="form-control" id="enddate" name="endDate"
+                                                   placeholder="YYYY-MM-DD"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="form-group my-3">
+                                            <label for="attachment">Attachment:</label>
+                                            <input type="file" class="form-control" id="attachment" name="attachment"/>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-check my-3">
+                                    <input type="checkbox" class="form-check-input" id="whatsNew" name="whatsNew"
+                                           checked/>
+                                    <label class="form-check-label" for="whatsNew">Add to What's New ?</label>
+                                </div>
+
+                                <div class="text-center mt-5">
+                                    <button type="button" class="btn btn-primary" id="save-news"> Save Notification
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Slno</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Attatchment</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="newsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#description').trumbowyg({
+                  lang: 'en',
+                  fixedBtnPane: false,
+                  fixedFullWidth: false,
+                  autogrow: false,
+                  autogrowOnEnter: false,
+                  height: 100,
+            });
+        });
+    </script>
+
+
+</main>
+
+</html>

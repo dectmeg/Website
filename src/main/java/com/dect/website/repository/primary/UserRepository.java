@@ -1,6 +1,6 @@
-package com.dect.website.repository;
+package com.dect.website.repository.primary;
 
-import com.dect.website.entity.Users;
+import com.dect.website.entity.primary.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

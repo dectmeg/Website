@@ -94,12 +94,15 @@
                 <div class="col-md-4 py-3">
                     <div class="card bg-danger bg-gradient text-white h-100">
                         <div class="card-body">
-                            <h6 class="fw-bold display-6 text-center">62949</h6>
+                            <h6 class="fw-bold display-6 text-center"><span th:text="${getCount.connect_kam}"></span>
+                            </h6>
                             <p class="text-center">
                                 Total Candidate Registrations<br>
-                                Male: 28149 | Female: 34800 | Others: 0<br>
+                                Male: <span th:text="${getCount.male_count}"></span> | Female: <span
+                                    th:text="${getCount.female_count}"></span> | Others: <span
+                                    th:text="${getCount.others_count}"></span><br>
                             </p>
-                            <span class="small"><em>*As of 31st Dec, 2023</em></span>
+                            <!--                            <span class="small"><em>*As of 31st Dec, 2023</em></span>-->
                         </div>
                     </div>
                 </div>
@@ -107,11 +110,12 @@
                 <div class="col-md-4 py-3">
                     <div class="card bg-secondary bg-gradient text-white h-100">
                         <div class="card-body">
-                            <h6 class="fw-bold display-6 text-center">1187</h6>
+                            <h6 class="fw-bold display-6 text-center"><span th:text="${getCount.skill_hands}"></span>
+                            </h6>
                             <p class="text-center">
                                 Total Registered Skillhands<br>
                             </p>
-                            <span class="position-absolute bottom-0 p-3 small"><em>*As of 31st Dec, 2023</em></span>
+                            <!--                            <span class="position-absolute bottom-0 p-3 small"><em>*As of 31st Dec, 2023</em></span>-->
                         </div>
                     </div>
                 </div>
@@ -119,11 +123,11 @@
                 <div class="col-md-4 py-3">
                     <div class="card bg-primary bg-gradient text-white h-100">
                         <div class="card-body">
-                            <h6 class="fw-bold display-6 text-center">2200</h6>
+                            <h6 class="fw-bold display-6 text-center">987</h6>
                             <p class="text-center">
-                                Total Candidates<br>
+                                Total ITI Admissions in 2023<br>
                             </p>
-                            <span class="position-absolute bottom-0 p-3 small"><em>*As of 31st Dec, 2023</em></span>
+                            <!--                            <span class="position-absolute bottom-0 p-3 small"><em>*As of 31st Dec, 2023</em></span>-->
                         </div>
                     </div>
                 </div>
@@ -137,34 +141,62 @@
                 </div>
                 <div class="card-body" id="newsContainer">
 
-                    <div class="mb-4">
-                        <p class="text-muted small">January 18, 2024</p>
-                        <h6 class="card-title">Skill Training</h6>
-                        <p class="card-text small"><a
-                                href="https://dectmeg.nic.in/dect/pdf/List%20of%20Trainings%20offered.pdf"
-                                target="_blank">ITI(Women) is offering free short term skill training for 3 months for
-                            females</a></p>
-                    </div>
-
-                    <div class="mb-4">
-                        <p class="text-muted small">December 11, 2023</p>
-                        <h6 class="card-title">Career</h6>
-                        <p class="card-text small"><a
-                                href="https://dectmeg.nic.in/dect/pdf/Office_Coordinator-District%20Legal%20Service,%20Nongstoin-1.pdf"
-                                target="_blank">Walk-in-interview at DLSA, Nongstoin for the post of Office Coordinator</a></p>
-                    </div>
-                    <div class="mb-4">
-                        <p class="text-muted small">December 7, 2023</p>
-                        <h6 class="card-title">Career</h6>
-                        <p class="card-text small"><a href="https://dectmeg.nic.in/dect/pdf/PlacementDrive_8thDec_2023.pdf" target="_blank">Placement Drive organised by Employment Exchange, Shillong on 8th Dec, 2023 at 10 A.M</a></p>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button class="btn btn-primary">View More</button>
-                    </div>
+                </div>
+                <div class="text-center mb-3">
+                    <a href="/news-events" class="btn btn-primary">View More</a>
                 </div>
             </div>
         </div>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function populateNewsDiv(newsList) {
+                var newsContainer = $('#newsContainer');
+                newsContainer.empty();
+
+                $.each(newsList, function(index, news) {
+                    var newsDate = new Date(news.date);
+                    var formattedDate = newsDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+
+                     var newsItem = '<div class="mb-3">' +
+                    '<div class="row">' +
+                    '<div class="col">' +
+                    '<h6 class="fw-semibold mb-0 text-secondary">' + news.title + '</h6>' +
+                    '</div>' +
+                    '<div class="col text-end">' +
+                    '<p class="text-muted fs-6 mb-0">' + formattedDate + '</p>' +
+                    '</div>' +
+                    '</div>' +
+                    '<p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(news.id) + '" target="_blank" class="text-decoration-none text-primary">' + news.description + '</a></p>' +
+                    '</div> <hr>';
+
+                newsContainer.append(newsItem);
+                });
+            }
+
+            function getAttachmentUrl(newsId) {
+                return '/news/attachment/' + newsId;
+            }
+
+            function fetchNewsData() {
+                $.ajax({
+                    url: '/news/whatsNew',
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        populateNewsDiv(response);
+                    },
+                    error: function() {
+                        console.error('Error fetching whats new.');
+                    }
+                });
+            }
+            fetchNewsData();
+        });
+    </script>
+
 </main>
 
 

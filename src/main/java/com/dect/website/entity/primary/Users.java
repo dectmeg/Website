@@ -1,4 +1,4 @@
-package com.dect.website.entity;
+package com.dect.website.entity.primary;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

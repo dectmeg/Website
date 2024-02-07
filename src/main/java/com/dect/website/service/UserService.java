@@ -1,7 +1,7 @@
 package com.dect.website.service;
 
-import com.dect.website.entity.Users;
-import com.dect.website.repository.UserRepository;
+import com.dect.website.entity.primary.Users;
+import com.dect.website.repository.primary.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

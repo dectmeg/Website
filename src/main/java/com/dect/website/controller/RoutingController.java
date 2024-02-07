@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class ViewController {
+public class RoutingController {
     @GetMapping("/contact_us")
     public String showContactPage() {
         return "contact_us";
@@ -93,5 +93,20 @@ public class ViewController {
     @GetMapping("/secure/news")
     public String showAdminNews() {
         return "secure/add_news";
+    }
+
+    @GetMapping("/secure/add_new_category")
+    public String showAdminAddNewsCategory() {
+        return "secure/add_news_category";
+    }
+
+    @GetMapping("/news-events")
+    public String showNewsEvents() {
+        return "news_events";
+    }
+
+    @GetMapping("/secure/notifications")
+    public String showAdminNotifications() {
+        return "secure/add_notifications";
     }
 }

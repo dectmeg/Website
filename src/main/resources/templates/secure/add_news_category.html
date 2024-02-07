@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/adminlayout.html}">
+
+<main class="container-fluid" th:fragment="content">
+
+    <div class="card mt-3 bg-white">
+        <div class="card-header">
+
+            <div class="card-title ">
+                News & Notices Categories
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                    Add News/Notice Category
+                </button>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Add News/Notice Category</h4>
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                                    aria-label="Close">X
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addCategoryForm" enctype="multipart/form-data">
+                                <div class="form-group my-3">
+                                    <label for="categoryName"><span class="text-danger">*</span>Category Name:</label>
+                                    <input type="text" class="form-control" id="categoryName" name="categoryName" required/>
+                                </div>
+                                <div class="text-center mt-5">
+                                    <button type="button" class="btn btn-primary" id="save-category"> Add Category
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Slno</th>
+                    <th>Category name</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="categoryTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $("#save-category").click(function() {
+                var categoryName = $("#category").val();
+
+                var formData = new FormData($("#addCategoryForm")[0]);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/secure/news/addCategory",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Category Added Successfully!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+
+                        setTimeout(function() {
+                            window.location.href = '/secure/add_new_category';
+                        }, 2000);
+                    },
+                    error: function(error) {
+                        console.error('Error:', error.responseText);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Failed to add. Please try again.',
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            function populateCategoryTable(categoryList) {
+                var tableBody = $('#categoryTableBody');
+                tableBody.empty();
+
+                $.each(categoryList, function(index, category) {
+                    var row = '<tr>' +
+                        '<td>' + (index + 1) + '</td>' +
+                        '<td>' + category.name + '</td>' +
+                        '<td><button class="btn btn-danger" onclick="deleteCategory(' + category.id + ')"><i class="fa fa-trash"></i></button></td>' +
+                        '</tr>';
+                    tableBody.append(row);
+                });
+            }
+
+            function fetchNewsCategories() {
+                $.ajax({
+                    url: '/news/viewCategory',
+                    method: 'GET',
+                    success: function(response) {
+                        console.log(response);
+                        populateCategoryTable(response);
+                    },
+                    error: function() {
+                        console.error('Error fetching news categories.');
+                    }
+                });
+            }
+
+            fetchNewsCategories();
+        });
+    </script>
+
+</main>
+</html>

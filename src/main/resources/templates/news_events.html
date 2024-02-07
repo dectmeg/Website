@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/layout.html}">
+
+<main class="container-fluid p-0 m-0" th:fragment="content">
+
+    <div class="container mt-3 pb-5">
+        <div class="card p-3">
+            <h4 class="card-title">News & Events</h4>
+            <hr class="hr">
+
+            <ul class="nav nav-tabs mb-3" id="newsTab" role="tablist">
+
+            </ul>
+            <div class="tab-content" id="newsTabContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+
+                    <div id="allNewsContainer"></div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+        $.ajax({
+            url: '/news/viewCategory',
+            method: 'GET',
+            success: function(response) {
+                populateNewsCategories(response);
+            },
+            error: function() {
+                console.error('Error fetching news categories.');
+            }
+        });
+
+
+        $('#newsTab').on('click', 'button.nav-link', function (e) {
+            e.preventDefault();
+            var newsTypeId = $(this).data('news-type-id');
+            var containerId = '#' + $(this).attr('aria-controls') + 'Container';
+            var newsContainer = $(containerId);
+            if (newsContainer.is(':empty')) {
+                fetchAndPopulateNews(newsTypeId, containerId);
+            }
+            $(this).tab('show');
+        });
+    });
+
+function populateNewsCategories(newsCategories) {
+    var newsTab = $('#newsTab');
+    var newsTabContent = $('#newsTabContent');
+    $.each(newsCategories, function(index, category) {
+        // Add tab
+        var tabId = 'newsType' + category.id;
+        var tabLink = $('<button class="nav-link" data-bs-toggle="tab" role="tab" aria-controls="' + tabId + '" aria-selected="false"></button>')
+            .attr('id', tabId + '-tab')
+            .attr('data-bs-target', '#' + tabId)
+            .text(category.name)
+            .data('news-type-id', category.id); // Add news type ID as data attribute
+        var tabItem = $('<li class="nav-item"></li>').append(tabLink);
+        newsTab.append(tabItem);
+
+        // Add tab pane
+        var tabPane = $('<div class="tab-pane fade"></div>')
+            .attr('id', tabId)
+            .attr('role', 'tabpanel')
+            .attr('aria-labelledby', tabId + '-tab');
+        var tabPaneContainer = $('<div></div>').attr('id', tabId + 'Container');
+        tabPane.append(tabPaneContainer);
+        newsTabContent.append(tabPane);
+    });
+}
+
+
+    </script>
+    <script>
+        function fetchAndPopulateNews(newsTypeId, containerId) {
+          $.ajax({
+            url: '/news/by-type?newsTypeId=' + newsTypeId,
+            method: 'GET',
+            success: function(response) {
+              populateNewsContainer(response, containerId);
+            },
+            error: function() {
+              console.error('Error fetching news data.');
+            }
+          });
+        }
+
+        // Function to populate news items in a specified container
+        function populateNewsContainer(newsList, containerId) {
+          var newsContainer = $(containerId);
+          newsContainer.empty();
+          $.each(newsList, function(index, news) {
+            var newsDate = new Date(news.date);
+            var formattedDate = newsDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+            var newsItem = '<div class="mb-3">' +
+                            '<div class="row">' +
+                            '<div class="col">' +
+                            '<h6 class="fw-semibold mb-0 text-secondary">' + news.title + '</h6>' +
+                            '</div>' +
+                            '<div class="col text-end">' +
+                            '<p class="text-muted fs-6 mb-0">' + formattedDate + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '<p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(news.id) + '" target="_blank" class="text-decoration-none text-primary">' + news.description + '</a></p>' +
+                            '</div> <hr>';
+            newsContainer.append(newsItem);
+          });
+        }
+
+        function getAttachmentUrl(newsId) {
+                return '/news/attachment/' + newsId;
+            }
+
+    </script>
+
+    <script>
+        $(document).ready(function() {
+    // Parse the URL parameter to get the selected tab
+    var urlParams = new URLSearchParams(window.location.search);
+    var selectedTab = urlParams.get('tab');
+    if (selectedTab) {
+        // Switch to the corresponding tab
+        $('#' + selectedTab + '-tab').tab('show');
+    }
+});
+
+    </script>
+</main>
+</html>

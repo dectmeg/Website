@@ -1,7 +1,7 @@
 package com.dect.website.service;
 
-import com.dect.website.entity.News;
-import com.dect.website.repository.NewsRepo;
+import com.dect.website.entity.primary.News;
+import com.dect.website.repository.primary.NewsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -59,7 +59,11 @@ public class NewsService {
     }
 
     public List<News> viewNews() {
-        return newsRepo.findAll();
+        return newsRepo.findAllByOrderByDateDescIdDesc();
+    }
+
+    public List<News> getTop5WhatsNew() {
+        return newsRepo.findTop5ByWhatsNewOrderByDateDescIdDesc(true);
     }
 
     public byte[] getAttachmentData(String attachmentName) {
@@ -82,5 +86,9 @@ public class NewsService {
             return news.getAttachmentName();
         }
         return null;
+    }
+
+    public List<News> getNewsByTypeId(Integer newsType) {
+        return newsRepo.findByNewsTypeId(newsType);
     }
 }

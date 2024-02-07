@@ -1,7 +1,7 @@
 package com.dect.website.service;
 
-import com.dect.website.entity.NewsType;
-import com.dect.website.repository.NewsTypeRepository;
+import com.dect.website.entity.primary.NewsType;
+import com.dect.website.repository.primary.NewsTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,4 +26,9 @@ public class NewsTypeService {
         Optional<NewsType> optionalNewsType = newsTypeRepository.findById(newsTypeId);
         return optionalNewsType.orElse(null);
     }
+
+    public NewsType saveNewsType(NewsType newsType) {
+        return newsTypeRepository.save(newsType);
+    }
+
 }

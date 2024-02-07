@@ -6,11 +6,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>DECT Admin</title>
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/summernote-bs4.min.js"></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css" integrity="sha512-Fm8kRNVGCBZn0sPmwJbVXlqfJmPC13zRsMElZenX6v721g/H7OukJd8XzDEBRQ2FSATK8xNF9UYvzsCtUpfeJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 </head>
 
@@ -47,7 +46,6 @@
     </nav>
 
     <div class="d-flex flex-nowrap">
-
         <div class="d-flex flex-column flex-shrink-0 p-3 card bg-white" style="width: 19vw;">
             <ul class="nav nav-pills flex-column mb-auto">
                 <li class="nav-item">
@@ -56,26 +54,39 @@
                         Dashboard
                     </a>
                 </li>
-                <li>
-                    <a href="/secure/news" class="nav-link ">
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#newsEventsCollapse">
                         <i class="fa-solid fa-newspaper me-3"></i>
                         News & Events
                     </a>
+                    <div class="collapse" id="newsEventsCollapse">
+                        <ul class="nav flex-column">
+                            <li><a class="nav-link" href="/secure/news">Add News/Events</a></li>
+                            <li><a class="nav-link" href="/secure/add_new_category">Add News/Events Category</a></li>
+                        </ul>
+                    </div>
                 </li>
-                <li>
-                    <a href="/secure/services" class="nav-link ">
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#notificationCollapse">
                         <i class="fa-solid fa-bell me-3"></i>
                         Notifications
                     </a>
+                    <div class="collapse" id="notificationCollapse">
+                        <ul class="nav flex-column">
+                            <li><a class="nav-link" href="/secure/notifications">New Notification</a></li>
+                            <li><a class="nav-link" href="/secure/add_new_attatchment">Add Attachment Type</a></li>
+                        </ul>
+                    </div>
                 </li>
-                <li>
-                    <a href="/secure/users" class="nav-link ">
+                <li class="nav-item">
+                    <a href="/secure/users" class="nav-link">
                         <i class="fa-solid fa-images me-3"></i>
                         Gallery
                     </a>
                 </li>
             </ul>
         </div>
+
 
         <div class="d-flex flex-column align-items-stretch flex-grow-1 min-vh-80">
 
@@ -95,16 +106,11 @@
     </footer>
     <!-- Footer -->
 
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <!--<script src="/node_modules/@popperjs/core/dist/cjs/popper.js"></script>-->
+
 
     <!--Jquery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js" integrity="sha512-YJgZG+6o3xSc0k5wv774GS+W1gx0vuSI/kr0E0UylL/Qg/noNspPtYwHPN9q6n59CTR/uhgXfjDXLTRI+uIryg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
         // jQuery function to add 'active' class to the navigation item based on the current URL
@@ -130,13 +136,8 @@
             // Call the function on page load to set the initial 'active' state
             setActiveNavItem();
 
-            setTimeout(initSummernote, 2000);
         });
 
-
-        function initSummernote() {
-            $('.summernote').summernote();
-        }
     </script>
 
 </body>

@@ -1,4 +1,4 @@
-package com.dect.website.entity;
+package com.dect.website.entity.primary;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
