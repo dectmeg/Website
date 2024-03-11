@@ -1,6 +1,7 @@
 package com.dect.website.entity.primary;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Calendar;
@@ -20,7 +21,12 @@ public class News {
     private String description;
 
     @Temporal(TemporalType.DATE)
-    private Date date;
+    @Column(name = "upload_date")
+    private Date uploadDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "start_date")
+    private Date startDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "end_date")
@@ -33,13 +39,25 @@ public class News {
     @JoinColumn(name = "news_type_id")
     private NewsType newsType;
 
-    @Column(name = "whats_new", nullable = false)
+    @Column(name = "whats_new")
     private boolean whatsNew;
+
+    @Column(name = "is_live")
+    private boolean isLive;
+
+    public boolean isLive() {
+        return isLive;
+    }
+
+    public void setIsLive(boolean isLive) {
+        this.isLive = isLive;
+    }
 
     @PrePersist
     public void onCreate() {
         Calendar cal = Calendar.getInstance();
         Date date = new Date();
-        this.setDate(new Date());
+        this.setUploadDate(new Date());
+        this.isLive = true;
     }
 }

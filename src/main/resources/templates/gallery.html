@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/layout.html}">
+
+<main class="container-fluid p-0 m-0" th:fragment="content">
+
+    <style>
+        .gallery-card {
+            margin-bottom: 20px;
+        }
+        .gallery-card img {
+            max-height: 200px;
+            object-fit: cover;
+        }
+    </style>
+
+    <div class="container mt-3 pb-5">
+        <div class="card p-3">
+            <div class="container">
+                <h4 class="text-center mb-4">Gallery</h4>
+                <hr>
+
+                <div id="galleryContainer" class="row">
+                    <!-- Gallery cards will be dynamically populated here -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/js/pages/gallery.js"></script>
+
+</main>
+</html>

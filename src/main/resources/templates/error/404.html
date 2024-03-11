@@ -1,14 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-    th:insert="${#authentication.isAuthenticated() and #authentication.principal != null and #authentication.principal != 'anonymousUser'} ? ~{fragments/adminlayout} : ~{fragments/layout}">
+    >
 
 <main class="container-fluid p-0 m-0" th:fragment="content">
 
-    <div class="container p-5 text-center">
-        <h1 class="text-center display-2">Page Not
-            Found!</h1>
-        <img src="/svg/404.gif" alt="" class="img-fluid">
+    <link href="/css/404.css" rel="stylesheet">
+    <script src="/js/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>-->
+    <script src="/js/404.js"></script>
+
+
+    <div class="box">
+    <div class="box__ghost">
+        <div class="symbol"></div>
+        <div class="symbol"></div>
+        <div class="symbol"></div>
+        <div class="symbol"></div>
+        <div class="symbol"></div>
+        <div class="symbol"></div>
+
+        <div class="box__ghost-container">
+            <div class="box__ghost-eyes">
+                <div class="box__eye-left"></div>
+                <div class="box__eye-right"></div>
+            </div>
+            <div class="box__ghost-bottom">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+        <div class="box__ghost-shadow"></div>
     </div>
+
+    <div class="box__description">
+        <div class="box__description-container">
+            <div class="box__description-title">Whoops!</div>
+            <div class="box__description-text">It seems like we couldn't find the page you were looking for</div>
+        </div>
+
+        <a href="/"  class="box__button">Go Home</a>
+
+    </div>
+
+</div>
+
 </main>
 
 </html>

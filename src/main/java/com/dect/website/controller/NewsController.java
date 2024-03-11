@@ -2,7 +2,7 @@ package com.dect.website.controller;
 
 import com.dect.website.entity.primary.News;
 import com.dect.website.entity.primary.NewsType;
-import com.dect.website.service.FileUploadService;
+import com.dect.website.service.NewsFileUploadService;
 import com.dect.website.service.NewsService;
 import com.dect.website.service.NewsTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +30,15 @@ public class NewsController {
     private NewsTypeService newsTypeService;
 
     @Autowired
-    private FileUploadService fileUploadService;
+    private NewsFileUploadService newsFileUploadService;
 
-    @Value("${upload.directory}")
-    private String uploadDirectory;
+    @Value("${upload.news-events-directory}")
+    private String NewsEventsDirectory;
 
     @PostMapping(value = "/secure/news/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addNews(@RequestParam("title") String title,
                                           @RequestParam("description") String description,
+                                          @RequestParam("startDate") String startDate,
                                           @RequestParam("endDate") String endDate,
                                           @RequestParam("attachment") MultipartFile attachment,
                                           @RequestParam("newsType") Long newsTypeId,
@@ -47,6 +48,7 @@ public class NewsController {
             News news = new News();
             news.setTitle(title);
             news.setDescription(description);
+            news.setStartDate(java.sql.Date.valueOf(startDate));
             news.setEndDate(java.sql.Date.valueOf(endDate));
             news.setWhatsNew(whatsNew);
 
@@ -77,10 +79,10 @@ public class NewsController {
         String fileName = newsService.getAttachmentName(newsId);
 
 
-        String filePath = uploadDirectory + File.separator + fileName;
+        String filePath = NewsEventsDirectory + File.separator + fileName;
 
 
-        Resource resource = fileUploadService.loadFileAsResource(filePath);
+        Resource resource = newsFileUploadService.loadFileAsResource(filePath);
 
 
         HttpHeaders headers = new HttpHeaders();
@@ -112,6 +114,12 @@ public class NewsController {
     @GetMapping("/news/by-type")
     public ResponseEntity<List<News>> getNewsByType(@RequestParam Integer newsTypeId) {
         return ResponseEntity.ok(newsService.getNewsByTypeId(newsTypeId));
+    }
+
+    @PostMapping("/news/delete/{id}")
+    public ResponseEntity<String> deleteNews(@PathVariable("id") Integer id) {
+        newsService.deleteNews(id, false);
+        return ResponseEntity.ok("News item deleted successfully");
     }
 }
 

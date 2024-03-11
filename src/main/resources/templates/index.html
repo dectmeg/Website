@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/layout.html}">
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="/js/jquery.min.js"></script>
 <main class="container-fluid  m-0 p-0" th:fragment="content">
     <link href="/css/index.css" rel="stylesheet">
     <div class="row">
@@ -35,11 +35,16 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 py-3">
+            <div class="container-fluid text-center mt-2">
+                <h4 class="mb-1 text-secondary-emphasis fw-bold">Services</h4>
+                <hr class="w-75 mx-auto mt-1">
+            </div>
             <div class="row">
-                <div class="col-md-4 py-3">
-                    <div class="card">
-                        <a href="https://dectmeg.nic.in/dectnew/candreg/" target="_blank" class="text-decoration-none">
+                <div class="col-md-4 pb-3">
+                    <div class="card h-100">
+                        <a href="https://dectmeg.nic.in/dectnew/candreg/" class="text-decoration-none openModalLink"
+                           data-bs-toggle="modal" data-bs-target="#myModal">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12">
@@ -55,9 +60,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 py-3">
-                    <div class="card">
-                        <a href="https://megskillhands.nic.in/" target="_blank" class="text-decoration-none">
+                <div class="col-md-4 pb-3">
+                    <div class="card h-100">
+                        <a href="https://megskillhands.nic.in/" target="_blank"
+                           class="text-decoration-none openModalLink" data-bs-toggle="modal" data-bs-target="#myModal">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 text-center">
@@ -73,9 +79,10 @@
                     </div>
                 </div>
 
-                <div class="col-md-4 py-3">
-                    <div class="card">
-                        <a href="#" class="text-decoration-none">
+                <div class="col-md-4 pb-3">
+                    <div class="card h-100">
+                        <a href="#" class="text-decoration-none openModalLink" data-bs-toggle="modal"
+                           data-bs-target="#myModal">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 text-center pt-3s">
@@ -90,8 +97,11 @@
                         </a>
                     </div>
                 </div>
-
-                <div class="col-md-4 py-3">
+                <div class="container-fluid text-center mt-3">
+                    <h4 class="mb-1 text-secondary-emphasis fw-bold">Dashboard</h4>
+                    <hr class="w-75 mx-auto mt-1">
+                </div>
+                <div class="col-md-4 pb-3">
                     <div class="card bg-danger bg-gradient text-white h-100">
                         <div class="card-body">
                             <h6 class="fw-bold display-6 text-center"><span th:text="${getCount.connect_kam}"></span>
@@ -102,12 +112,10 @@
                                     th:text="${getCount.female_count}"></span> | Others: <span
                                     th:text="${getCount.others_count}"></span><br>
                             </p>
-                            <!--                            <span class="small"><em>*As of 31st Dec, 2023</em></span>-->
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-4 py-3">
+                <div class="col-md-4 pb-3">
                     <div class="card bg-secondary bg-gradient text-white h-100">
                         <div class="card-body">
                             <h6 class="fw-bold display-6 text-center"><span th:text="${getCount.skill_hands}"></span>
@@ -115,19 +123,17 @@
                             <p class="text-center">
                                 Total Registered Skillhands<br>
                             </p>
-                            <!--                            <span class="position-absolute bottom-0 p-3 small"><em>*As of 31st Dec, 2023</em></span>-->
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-4 py-3">
+                <div class="col-md-4 pb-3">
                     <div class="card bg-primary bg-gradient text-white h-100">
                         <div class="card-body">
                             <h6 class="fw-bold display-6 text-center">987</h6>
                             <p class="text-center">
                                 Total ITI Admissions in 2023<br>
                             </p>
-                            <!--                            <span class="position-absolute bottom-0 p-3 small"><em>*As of 31st Dec, 2023</em></span>-->
                         </div>
                     </div>
                 </div>
@@ -135,67 +141,40 @@
             </div>
         </div>
         <div class="col-lg-4 col-md-12 py-3">
+            <div class="container-fluid text-center mt-2">
+                <h4 class="mb-1 text-secondary-emphasis fw-bold">What's New</h4>
+                <hr class="w-75 mx-auto mt-1">
+            </div>
             <div class="card">
-                <div class="bg-secondary bg-gradient text-white card-header">
-                    <h5 class="">What's New</h5>
+                <ul class="nav nav-tabs" id="myTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="news-tab" data-bs-toggle="tab" href="#news" role="tab"
+                           aria-controls="news" aria-selected="true">News/Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="notifications-tab" data-bs-toggle="tab" href="#notifications" role="tab"
+                           aria-controls="notifications" aria-selected="false">Notifications</a>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="news" role="tabpanel" aria-labelledby="news-tab">
+                            <div id="newsContainer"></div>
+                        </div>
+                        <div class="tab-pane fade" id="notifications" role="tabpanel"
+                             aria-labelledby="notifications-tab">
+                            <div id="notificationsContainer"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body" id="newsContainer">
-
-                </div>
-                <div class="text-center mb-3">
-                    <a href="/news-events" class="btn btn-primary">View More</a>
+                <div class="text-center mb-3" id="viewAllButtonContainer">
+                    <a id="viewAllButton" class="btn btn-primary" href="/news-events?type=Career">View All</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            function populateNewsDiv(newsList) {
-                var newsContainer = $('#newsContainer');
-                newsContainer.empty();
-
-                $.each(newsList, function(index, news) {
-                    var newsDate = new Date(news.date);
-                    var formattedDate = newsDate.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
-
-                     var newsItem = '<div class="mb-3">' +
-                    '<div class="row">' +
-                    '<div class="col">' +
-                    '<h6 class="fw-semibold mb-0 text-secondary">' + news.title + '</h6>' +
-                    '</div>' +
-                    '<div class="col text-end">' +
-                    '<p class="text-muted fs-6 mb-0">' + formattedDate + '</p>' +
-                    '</div>' +
-                    '</div>' +
-                    '<p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(news.id) + '" target="_blank" class="text-decoration-none text-primary">' + news.description + '</a></p>' +
-                    '</div> <hr>';
-
-                newsContainer.append(newsItem);
-                });
-            }
-
-            function getAttachmentUrl(newsId) {
-                return '/news/attachment/' + newsId;
-            }
-
-            function fetchNewsData() {
-                $.ajax({
-                    url: '/news/whatsNew',
-                    method: 'GET',
-                    success: function(response) {
-                        console.log(response);
-                        populateNewsDiv(response);
-                    },
-                    error: function() {
-                        console.error('Error fetching whats new.');
-                    }
-                });
-            }
-            fetchNewsData();
-        });
-    </script>
+    <script src="/js/pages/index.js"></script>
 
 </main>
 

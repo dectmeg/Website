@@ -16,7 +16,7 @@ public class RoutingController {
     }
 
     @GetMapping("/organization_structure")
-    public String showOrganizationStruicture() {
+    public String showOrganizationStructure() {
         return "organization_structure";
     }
 
@@ -95,18 +95,53 @@ public class RoutingController {
         return "secure/add_news";
     }
 
-    @GetMapping("/secure/add_new_category")
-    public String showAdminAddNewsCategory() {
-        return "secure/add_news_category";
-    }
-
     @GetMapping("/news-events")
     public String showNewsEvents() {
         return "news_events";
     }
 
+    @GetMapping("/terms-of-use")
+    public String showTermsOfUse() {
+        return "terms_of_use";
+    }
+
+    @GetMapping("/accessibility-statement")
+    public String showAccessibilityStatement() {
+        return "accessibility_statement";
+    }
+
+    @GetMapping("/privacy-policy")
+    public String showPrivacyPolicy() {
+        return "privacy_policy";
+    }
+
+    @GetMapping("/notification-tenders")
+    public String showNotificationTenders() {
+        return "notification_tenders";
+    }
+
+    @GetMapping("/gallery")
+    public String showGallery() {
+        return "gallery";
+    }
+
+    @GetMapping("/view_images")
+    public String showGalleryImages() {
+        return "view_images";
+    }
+
     @GetMapping("/secure/notifications")
     public String showAdminNotifications() {
         return "secure/add_notifications";
+    }
+
+    @GetMapping("/secure/add-photos")
+    public String showAdminGallery() {
+        return "secure/add_photos";
+    }
+
+    @GetMapping("/secure/key-contacts")
+    public String showAdminKeyContacts() {
+        return "secure/add_key_contacts";
     }
 }

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/adminlayout.html}">
+
+<main class="container-fluid" th:fragment="content">
+
+    <div class="card mt-3 bg-white">
+        <div class="card-header">
+
+            <div class="card-title ">
+                Events
+                <button type="button" class="btn btn-primary float-end" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal">
+                    Add New Event
+                </button>
+            </div>
+
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title fs-5" id="exampleModalLabel">Add New Event</h4>
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal"
+                                    aria-label="Close">X
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addGalleryEventForm" enctype="multipart/form-data">
+                                <div class="form-group my-3">
+                                    <label for="title"><span class="text-danger">*</span>Title:</label>
+                                    <input type="text" class="form-control" id="title" name="title" required/>
+                                </div>
+
+                                <div class="form-group my-3">
+                                    <label for="description">Description:</label>
+                                    <textarea class="form-control" id="description" name="description"></textarea>
+                                </div>
+                                <div class="form-group my-3">
+                                    <label for="eventDate">Event Date:</label>
+                                    <input type="date" class="form-control" id="eventDate" name="eventDate"
+                                           placeholder="YYYY-MM-DD"/>
+                                </div>
+                                <div class="form-group my-3">
+                                    <label for="images">Pictures:</label>
+                                    <input type="file" class="form-control" id="images" name="images" multiple accept="image/*"/>
+                                    <div id="imagePreviews" class="mt-2"></div>
+                                </div>
+                                <div class="text-center mt-5">
+                                    <button type="button" class="btn btn-primary" id="save-news"> Save Event
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                <tr>
+                    <th>Slno</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Event Date</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="eventsTableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 800px;"> <!-- Added 'modal-dialog-centered' and 'modal-dialog-scrollable' classes for centering and scrolling -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Form fields for editing event details -->
+                    <form id="editEventForm">
+                        <input type="hidden" id="eventId">
+                        <div class="form-group">
+                            <label for="editTitle">Title:</label>
+                            <input type="text" class="form-control" id="editTitle" name="editTitle">
+                        </div><br>
+                        <!-- Image Previews -->
+                        <span class="small">Pictures: </span>
+                        <div id="editImagePreviews" class="mb-3 row"></div> <!-- Added 'row' class for horizontal layout -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesBtn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/pages/add_photos.js"></script>
+</main>
+</html>
