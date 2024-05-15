@@ -33,10 +33,6 @@ public class SecurityConfig {
             + "font-src 'self' data: https://fonts.gstatic.com;"
             + "img-src 'self' data:;";
 
-
-
-
-
     @Autowired
     AuditTrailRepository auditTrailRepository;
 

@@ -18,4 +18,8 @@ public class KeyContactsService {
     public Iterable<KeyContacts> getAllKeyContacts() {
         return keyContactRepository.findAll();
     }
+
+    public void deleteKeyContact(Long id){
+         keyContactRepository.deleteById(id);
+    }
 }

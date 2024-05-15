@@ -185,4 +185,5 @@ function deleteNews(newsId) {
             });
         }
     });
+
 }

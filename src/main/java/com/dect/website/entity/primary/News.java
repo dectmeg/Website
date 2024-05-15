@@ -3,6 +3,7 @@ package com.dect.website.entity.primary;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Calendar;
 import java.util.Date;
