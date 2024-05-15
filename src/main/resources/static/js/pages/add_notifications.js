@@ -17,14 +17,14 @@ $(document).ready(function() {
             url: '/notification/types',
             method: 'GET',
             success: function(response) {
-                // Add the default option (disabled and selected)
+
                 notificationTypeSelect.append($('<option></option>')
                     .attr('value', '')
                     .text('- Select Notification Type - ')
                     .prop('disabled', true)
                     .prop('selected', true));
 
-                // Add the news types from the response
+
                 response.forEach(function(notificationType) {
                     notificationTypeSelect.append($('<option></option>')
                         .val(notificationType.id)
@@ -40,6 +40,23 @@ $(document).ready(function() {
     populateNotificationTypeDropdown();
 
     $("#save-notification").click(function() {
+
+
+        var form = $("#addNotificationForm")[0];
+
+                if (form.checkValidity() === false) {
+                    form.reportValidity();
+                    return;
+                }
+
+
+                    var attachment = $("#attachment")[0].files[0];
+                    if (attachment && attachment.type !== "application/pdf") {
+                        alert("Please upload a PDF file.");
+                        return;
+                    }
+
+
         var title = $("#title").val();
         var description = $("#description").val();
         var startDate = $("#startDate").val();
@@ -59,21 +76,21 @@ $(document).ready(function() {
             processData: false,
             enctype: 'multipart/form-data',
             beforeSend: function(request) {
-                // Include CSRF token in the request header
+
                 request.setRequestHeader(header, token);
             },
             success: function(response) {
                 Swal.fire({
                     icon: 'success',
                     title: 'News Saved Successfully!',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                    confirmButtonText: 'OK'
+                                        }).then((result) => {
 
-                setTimeout(function() {
-                    window.location.href = '/secure/notifications';
-                }, 2000);
-            },
+                                            if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+                                                window.location.reload();
+                                            }
+                                        });
+                                    },
             error: function(error) {
                 console.error('Error adding news:', error.responseText);
                 Swal.fire({
@@ -85,10 +102,10 @@ $(document).ready(function() {
         });
     });
 
-    // Function to populate the table with news data
+
     function populateNotificationTable(notificationList) {
         var tableBody = $('#notificationTableBody');
-        tableBody.empty(); // Clear existing rows
+        tableBody.empty();
 
         $.each(notificationList, function(index, notification) {
             var row = '<tr>' +
@@ -125,7 +142,7 @@ $(document).ready(function() {
 
     fetchNotificationData();
 
-    // Attach event listener to handle delete action
+
     $('#notificationTableBody').on('click', '.delete-notification', function() {
         var notificationId = $(this).data('notification-id');
         deleteNotification(notificationId);
@@ -136,7 +153,7 @@ function deleteNotification(notificationId) {
     const token = $("meta[name='_csrf']").attr("content");
     const header = $("meta[name='_csrf_header']").attr("content");
 
-    // Show a confirmation dialog before proceeding with the delete operation
+
     Swal.fire({
         title: 'Are you sure?',
         text: 'You won\'t be able to revert this!',
@@ -147,30 +164,30 @@ function deleteNotification(notificationId) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            // If the user confirms, proceed with the delete operation
+
             $.ajax({
                 url: '/notifications/delete/' + notificationId,
                 type: 'POST',
                 beforeSend: function(request) {
-                    // Include CSRF token in the request header
+
                     request.setRequestHeader(header, token);
                 },
                 success: function(response) {
-                    // Show a success dialog if the delete operation is successful
+
                     Swal.fire({
                         title: 'Deleted!',
                         text: 'The news item has been deleted.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {
-                        // Reload the page after the user clicks "OK"
+
                         if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
                             window.location.reload();
                         }
                     });
                 },
                 error: function(xhr, status, error) {
-                    // Show an error dialog if there's an issue with the delete operation
+
                     Swal.fire({
                         title: 'Error!',
                         text: 'Failed to delete the news item. Please try again later.',

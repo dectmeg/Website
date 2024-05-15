@@ -47,11 +47,24 @@ public class NotificationController {
                                           @RequestParam("whatsNew") boolean whatsNew) {
 
         try {
+
+
             Notification notification = new Notification();
             notification.setTitle(title);
             notification.setDescription(description);
-            notification.setStartDate(java.sql.Date.valueOf(startDate));
-            notification.setEndDate(java.sql.Date.valueOf(endDate));
+
+            if (startDate != null && !startDate.isEmpty()) {
+                notification.setStartDate(java.sql.Date.valueOf(startDate));
+            } else {
+                notification.setStartDate(null);
+            }
+
+            if (endDate != null && !endDate.isEmpty()) {
+                notification.setEndDate(java.sql.Date.valueOf(endDate));
+            } else {
+                notification.setEndDate(null);
+            }
+
             notification.setWhatsNew(whatsNew);
 
             NotificationType notificationType = notitificationTypeService.getNotificationTypeById(notificationTypeId);

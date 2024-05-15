@@ -2,23 +2,23 @@ $(document).ready(function() {
     const token = $("meta[name='_csrf']").attr("content");
     const header = $("meta[name='_csrf_header']").attr("content");
 
-    // Function to populate the news type dropdown
+
     function populateNewsTypeDropdown() {
         var newsTypeSelect = $('#newsType');
 
-        // Make an AJAX request to fetch the news types
+
         $.ajax({
             url: '/news/types',
             method: 'GET',
             success: function(response) {
-                // Add the default option (disabled and selected)
+
                 newsTypeSelect.append($('<option></option>')
                     .attr('value', '')
                     .text('- Select News Type - ')
                     .prop('disabled', true)
                     .prop('selected', true));
 
-                // Add the news types from the response
+
                 response.forEach(function(newsType) {
                     newsTypeSelect.append($('<option></option>')
                         .val(newsType.id)
@@ -31,14 +31,34 @@ $(document).ready(function() {
         });
     }
 
-    // Call the function to populate the dropdown
+
     populateNewsTypeDropdown();
 
     $("#save-news").click(function() {
+
+        var form = $("#addNewsForm")[0];
+
+        if (form.checkValidity() === false) {
+            form.reportValidity();
+            return;
+        }
+
+        // Validate the attachment is a PDF
+            var attachment = $("#attachment")[0].files[0];
+            if (attachment && attachment.type !== "application/pdf") {
+                alert("Please upload a PDF file.");
+                return;
+            }
+
+
         var title = $("#title").val();
         var description = $("#description").val();
+
         var startDate = $("#startDate").val();
-        var endDate = $("#enddate").val();
+        var endDate = $("#endDate").val();
+
+
+
         var attachment = $("#attachment")[0].files[0];
         var newsType = $('#newsType option:selected').val();
         var whatsNew = $("#whatsNew").is(":checked");
@@ -61,14 +81,15 @@ $(document).ready(function() {
                 Swal.fire({
                     icon: 'success',
                     title: 'News Saved Successfully!',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                    showConfirmButton: true,
+                    confirmButtonText: 'OK'
+                }).then((result) => {
 
-                setTimeout(function() {
-                    window.location.href = '/secure/news';
-                }, 2000);
-            },
+                                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+                                            window.location.reload();
+                                        }
+                                    });
+                                },
             error: function(error) {
                 console.error('Error adding news:', error.responseText);
                 Swal.fire({
@@ -89,7 +110,7 @@ $(document).ready(function() {
         height: 100,
     });
 
-    // Function to populate the table with news data
+
     function populateNewsTable(newsList) {
         var tableBody = $('#newsTableBody');
         tableBody.empty(); // Clear existing rows
@@ -129,7 +150,7 @@ $(document).ready(function() {
 
     fetchNewsData();
 
-    // Attach event listener to handle delete action
+
     $('#newsTableBody').on('click', '.delete-news', function() {
         var newsId = $(this).data('news-id');
         deleteNews(newsId);
@@ -141,7 +162,7 @@ function deleteNews(newsId) {
     const token = $("meta[name='_csrf']").attr("content");
     const header = $("meta[name='_csrf_header']").attr("content");
 
-    // Show a confirmation dialog before proceeding with the delete operation
+
     Swal.fire({
         title: 'Are you sure?',
         text: 'You won\'t be able to revert this!',
@@ -152,7 +173,7 @@ function deleteNews(newsId) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            // If the user confirms, proceed with the delete operation
+
             $.ajax({
                 url: '/news/delete/' + newsId,
                 type: 'POST',
@@ -160,21 +181,21 @@ function deleteNews(newsId) {
                     request.setRequestHeader(header, token);
                 },
                 success: function(response) {
-                    // Show a success dialog if the delete operation is successful
+
                     Swal.fire({
                         title: 'Deleted!',
                         text: 'The news item has been deleted.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {
-                        // Reload the page after the user clicks "OK"
+
                         if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
                             window.location.reload();
                         }
                     });
                 },
                 error: function(xhr, status, error) {
-                    // Show an error dialog if there's an issue with the delete operation
+
                     Swal.fire({
                         title: 'Error!',
                         text: 'Failed to delete the news item. Please try again later.',

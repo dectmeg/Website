@@ -20,6 +20,7 @@ public class KeyContactsController {
 
         keyContactService.saveKeyContacts(keyContacts);
 
+
         return ResponseEntity.ok("Key contact added successfully");
     }
 

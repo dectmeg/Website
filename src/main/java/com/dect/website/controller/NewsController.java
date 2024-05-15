@@ -18,7 +18,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 public class NewsController {
@@ -43,13 +46,23 @@ public class NewsController {
                                           @RequestParam("attachment") MultipartFile attachment,
                                           @RequestParam("newsType") Long newsTypeId,
                                           @RequestParam("whatsNew") boolean whatsNew) {
-
         try {
             News news = new News();
             news.setTitle(title);
             news.setDescription(description);
-            news.setStartDate(java.sql.Date.valueOf(startDate));
-            news.setEndDate(java.sql.Date.valueOf(endDate));
+
+            if (startDate != null && !startDate.isEmpty()) {
+                news.setStartDate(java.sql.Date.valueOf(startDate));
+            } else {
+                news.setStartDate(null);
+            }
+
+            if (endDate != null && !endDate.isEmpty()) {
+                news.setEndDate(java.sql.Date.valueOf(endDate));
+            } else {
+                news.setEndDate(null);
+            }
+
             news.setWhatsNew(whatsNew);
 
             NewsType newsType = newsTypeService.getNewsTypeById(newsTypeId);
@@ -58,10 +71,9 @@ public class NewsController {
             }
             news.setNewsType(newsType);
 
-            // Pass the news entity and the attachment to the saveNews method
             news = newsService.saveNews(news, attachment);
 
-            // Check if news is successfully saved before proceeding
+
             if (news != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("News saved successfully.");
             } else {
@@ -71,6 +83,7 @@ public class NewsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save news.");
         }
     }
+
 
 
     @GetMapping("/news/attachment/{newsId}")
