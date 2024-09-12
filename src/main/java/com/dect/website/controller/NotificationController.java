@@ -6,6 +6,7 @@ import com.dect.website.entity.primary.NotificationType;
 import com.dect.website.service.NotificationFileUploadService;
 import com.dect.website.service.NotificationService;
 import com.dect.website.service.NotitificationTypeService;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -37,6 +38,10 @@ public class NotificationController {
     @Value("${upload.notifications-directory}")
     private String notificationsDirectory;
 
+    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+    private static final String PDF_MIME_TYPE = "application/pdf";
+
+
     @PostMapping(value = "/secure/notification/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addNotification(@RequestParam("title") String title,
                                           @RequestParam("description") String description,
@@ -47,7 +52,23 @@ public class NotificationController {
                                           @RequestParam("whatsNew") boolean whatsNew) {
 
         try {
+            // Validate file size
+            if (attachment.getSize() > MAX_FILE_SIZE) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File size must be less than 10MB.");
+            }
 
+            // Validate MIME type using Tika
+            Tika tika = new Tika();
+            String mimeType = tika.detect(attachment.getBytes());
+            if (!PDF_MIME_TYPE.equals(mimeType)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF files are allowed.");
+            }
+
+            // Validate filename for double extensions and null bytes
+            String originalFilename = attachment.getOriginalFilename();
+            if (originalFilename != null && (originalFilename.contains("..") || originalFilename.contains("%00"))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid filename.");
+            }
 
             Notification notification = new Notification();
             notification.setTitle(title);
@@ -73,9 +94,7 @@ public class NotificationController {
             }
             notification.setNotificationType(notificationType);
 
-
             notification = notificationService.saveNotification(notification, attachment);
-
 
             if (notification != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("Notification saved successfully.");

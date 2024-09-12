@@ -117,7 +117,7 @@ function fetchAndPopulateNotifications(notificationTypeId, containerId) {
                         '</div>';
         }
 
-        notificationItem += '</div><div class="col-12"><p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(notification.id) + '" target="_blank" class="text-decoration-none text-primary">' + notification.description + '</a></p></div><hr>';
+        notificationItem += '</div><div class="col-12"><p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(notification.id) + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-primary">' + notification.description + '</a></p></div><hr>';
         notificationContainer.append(notificationItem);
     });
 }

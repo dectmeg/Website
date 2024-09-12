@@ -144,4 +144,14 @@ public class RoutingController {
     public String showAdminKeyContacts() {
         return "secure/add_key_contacts";
     }
+
+    @GetMapping("/news_archive")
+    public String showNewsArchive() {
+        return "news_archive";
+    }
+    @GetMapping("/secure/audit_trail")
+    public String showAuditTrail() {
+        return "/secure/audit_trail";
+    }
+
 }

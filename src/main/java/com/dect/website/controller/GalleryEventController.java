@@ -1,5 +1,6 @@
 package com.dect.website.controller;
 
+import org.apache.tika.Tika;
 import com.dect.website.entity.primary.GalleryEvent;
 import com.dect.website.entity.primary.News;
 import com.dect.website.service.GalleryEventService;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +28,12 @@ public class GalleryEventController {
 
     @Value("${upload.gallery-directory}")
     private String galleryDirectory;
+
+    private static final List<String> ALLOWED_IMAGE_CONTENT_TYPES = Arrays.asList(
+            "image/jpeg", "image/png"
+    );
+
+    private final Tika tika = new Tika();
 
     @PostMapping(value = "/secure/gallery-events/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addGalleryEvent(@RequestParam("title") String title,
@@ -39,13 +47,20 @@ public class GalleryEventController {
             galleryEvent.setDescription(description);
             galleryEvent.setEventDate(java.sql.Date.valueOf(eventDate));
 
-            // Save images to storage and store their file names in the database
             for (MultipartFile image : images) {
+                if (image.isEmpty()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more files are empty.");
+                }
+
+                String mimeType = tika.detect(image.getInputStream());
+                if (!ALLOWED_IMAGE_CONTENT_TYPES.contains(mimeType) || image.getSize() > 2 * 1024 * 1024) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("One or more files are invalid or exceed 2MB.");
+                }
+
                 String fileName = galleryEventService.saveImage(image, title);
                 galleryEventService.addImageToGalleryEvent(galleryEvent, fileName);
             }
 
-            // Save gallery event to the database
             galleryEventService.saveGalleryEvent(galleryEvent);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Gallery event saved successfully.");

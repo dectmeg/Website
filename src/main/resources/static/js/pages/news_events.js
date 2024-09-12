@@ -118,7 +118,7 @@ function fetchAndPopulateNews(newsTypeId, containerId) {
                         '</div>';
         }
 
-        newsItem += '</div><div class="col-12"><p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(news.id) + '" target="_blank" class="text-decoration-none text-primary">' + news.description + '</a></p></div><hr>';
+        newsItem += '</div><div class="col-12"><p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(news.id) + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-primary">' + news.description + '</a></p></div><hr>';
         newsContainer.append(newsItem);
     });
 }

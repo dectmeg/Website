@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/layout.html}">
+
+<main class="container-fluid p-0 m-0" th:fragment="content">
+
+    <div class="container mt-3 pb-5">
+        <div class="card p-3">
+            <h4 class="card-title">Notifications & Tenders Archive</h4>
+            <hr class="hr">
+
+            <div class="tab-content" id="notificationsTabContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+
+                    <div id="allNotificationsContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/pages/notificaton_archive.js"></script>
+</main>
+</html>

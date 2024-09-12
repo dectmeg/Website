@@ -6,12 +6,18 @@ const checkCaptcha = () => {
     if (captcha.value !== hiddenCaptcha.value) {
         captcha.value = "";
 
-        // Use SweetAlert for displaying error message
-        Swal.fire({
-            icon: "error",
-            title: "Error!",
-            text: "Captcha Does Not Match!",
-            confirmButtonText: "OK",
+        // Use jquery-confirm for displaying error message
+        $.confirm({
+            title: 'Error!',
+            content: 'Captcha Does Not Match!',
+            type: 'red',
+            buttons: {
+                OK: {
+                    text: 'OK',
+                    btnClass: 'btn-red',
+                    action: function () {}
+                }
+            }
         });
 
         return false; // Return false to prevent form submission
@@ -41,6 +47,9 @@ const reloadCaptcha = () => {
 
 // Wait for the document to be fully loaded
 $(document).ready(function() {
+
+    console.log(jQuery().jquery);
+
     // Bind reloadCaptcha function to click event of reloadCaptchaBtn
     $("#reloadCaptchaBtn").on("click", function(event) {
         event.preventDefault(); // Prevent default link behavior

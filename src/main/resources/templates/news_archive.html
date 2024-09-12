@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:insert="~{fragments/layout.html}">
+
+<main class="container-fluid p-0 m-0" th:fragment="content">
+
+    <div class="container mt-3 pb-5">
+        <div class="card p-3">
+            <h4 class="card-title">News & Events Archive</h4>
+            <hr class="hr">
+
+            <div class="tab-content" id="newsTabContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+
+                    <div id="allNewsContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/pages/news_archive.js"></script>
+</main>
+</html>

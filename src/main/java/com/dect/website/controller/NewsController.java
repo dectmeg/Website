@@ -5,6 +5,7 @@ import com.dect.website.entity.primary.NewsType;
 import com.dect.website.service.NewsFileUploadService;
 import com.dect.website.service.NewsService;
 import com.dect.website.service.NewsTypeService;
+import org.apache.tika.Tika;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -38,6 +39,9 @@ public class NewsController {
     @Value("${upload.news-events-directory}")
     private String NewsEventsDirectory;
 
+    private static final long MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
+    private static final String PDF_MIME_TYPE = "application/pdf";
+
     @PostMapping(value = "/secure/news/add", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addNews(@RequestParam("title") String title,
                                           @RequestParam("description") String description,
@@ -47,6 +51,24 @@ public class NewsController {
                                           @RequestParam("newsType") Long newsTypeId,
                                           @RequestParam("whatsNew") boolean whatsNew) {
         try {
+            // Validate file size
+            if (attachment.getSize() > MAX_FILE_SIZE) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("File size must be less than 10MB.");
+            }
+
+            // Validate MIME type using Tika
+            Tika tika = new Tika();
+            String mimeType = tika.detect(attachment.getBytes());
+            if (!PDF_MIME_TYPE.equals(mimeType)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Only PDF files are allowed.");
+            }
+
+            // Validate filename for double extensions and null bytes
+            String originalFilename = attachment.getOriginalFilename();
+            if (originalFilename != null && (originalFilename.contains("..") || originalFilename.contains("%00"))) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid filename.");
+            }
+
             News news = new News();
             news.setTitle(title);
             news.setDescription(description);
@@ -72,7 +94,6 @@ public class NewsController {
             news.setNewsType(newsType);
 
             news = newsService.saveNews(news, attachment);
-
 
             if (news != null) {
                 return ResponseEntity.status(HttpStatus.CREATED).body("News saved successfully.");

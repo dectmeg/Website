@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    $("#contactsTableBody").sortable();
+    $("#contactsTableBody").disableSelection();
+
     $("#save-contact").click(function() {
         var name = $("#nameAndDesignation").val();
         var office = $("#office").val();
@@ -12,7 +15,6 @@ $(document).ready(function() {
             email: email
         };
 
-        // Get CSRF token from the meta tags
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -22,33 +24,34 @@ $(document).ready(function() {
             data: JSON.stringify(data),
             contentType: "application/json",
             beforeSend: function(request) {
-                // Include CSRF token in the request header
                 request.setRequestHeader(header, token);
             },
             success: function(response) {
-                // Show success message using Swal.fire
-                Swal.fire({
+                $.confirm({
                     title: 'Contact Added!',
-                    text: 'The contact has been added successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    // Reload the page after the user clicks "OK"
-                    if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-                        window.location.reload();
+                    content: 'The contact has been added successfully.',
+                    type: 'green',
+                    buttons: {
+                        ok: function() {
+                            window.location.reload();
+                        }
                     }
                 });
             },
             error: function(xhr, status, error) {
                 console.error("Failed to add contact:", error);
-                // Handle error response here
+                $.alert({
+                    title: 'Error!',
+                    content: 'Failed to add contact. Please try again later.',
+                    type: 'red'
+                });
             }
         });
     });
 
     function populateContactsTable(contactsList) {
         var tableBody = $('#contactsTableBody');
-        tableBody.empty(); // Clear existing rows
+        tableBody.empty();
 
         $.each(contactsList, function(index, contacts) {
             var row = '<tr>' +
@@ -78,61 +81,96 @@ $(document).ready(function() {
 
     fetchContactsData();
 
-    // Attach event listener to handle delete action
     $('#contactsTableBody').on('click', '.delete-contact', function() {
         var contactId = $(this).data('contact-id');
         deleteContact(contactId);
     });
-});
 
-function deleteContact(contactId) {
-    // Get CSRF token from the meta tags
-    var token = $("meta[name='_csrf']").attr("content");
-    var header = $("meta[name='_csrf_header']").attr("content");
+    $("#saveOrder").click(function() {
+        var order = [];
+        $("#contactsTableBody tr").each(function(index, element) {
+            var contactId = $(element).find(".delete-contact").data("contact-id");
+            order.push({
+                id: contactId,
+                order: index + 1
+            });
+        });
 
-    // Show a confirmation dialog before proceeding with the delete operation
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // If the user confirms, proceed with the delete operation
-            $.ajax({
-                url: '/key-contacts/delete/' + contactId,
-                type: 'POST',
-                beforeSend: function(request) {
-                    // Include CSRF token in the request header
-                    request.setRequestHeader(header, token);
-                },
-                success: function(response) {
-                    // Show a success dialog if the delete operation is successful
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: 'The contact has been deleted.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-                        // Reload the page after the user clicks "OK"
-                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.ajax({
+            type: "POST",
+            url: "/secure/key-contacts/reorder",
+            data: JSON.stringify(order),
+            contentType: "application/json",
+            beforeSend: function(request) {
+                request.setRequestHeader(header, token);
+            },
+            success: function(response) {
+                $.confirm({
+                    title: 'Order Saved!',
+                    content: 'The new order has been saved successfully.',
+                    type: 'green',
+                    buttons: {
+                        ok: function() {
                             window.location.reload();
                         }
-                    });
-                },
-                error: function(xhr, status, error) {
-                    // Show an error dialog if there's an issue with the delete operation
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to delete contact. Please try again later.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            });
-        }
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error("Failed to save order:", error);
+                $.alert({
+                    title: 'Error!',
+                    content: 'Failed to save order. Please try again later.',
+                    type: 'red'
+                });
+            }
+        });
     });
-}
+
+    function deleteContact(contactId) {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+
+        $.confirm({
+            title: 'Are you sure?',
+            content: 'You won\'t be able to revert this!',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: 'Yes, delete it!',
+                    btnClass: 'btn-red',
+                    action: function() {
+                        $.ajax({
+                            url: '/key-contacts/delete/' + contactId,
+                            type: 'POST',
+                            beforeSend: function(request) {
+                                request.setRequestHeader(header, token);
+                            },
+                            success: function(response) {
+                                $.alert({
+                                    title: 'Deleted!',
+                                    content: 'The contact has been deleted.',
+                                    type: 'green'
+                                });
+                                window.location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                $.alert({
+                                    title: 'Error!',
+                                    content: 'Failed to delete contact. Please try again later.',
+                                    type: 'red'
+                                });
+                            }
+                        });
+                    }
+                },
+                cancel: function() {
+                    // Do nothing
+                }
+            }
+        });
+    }
+});

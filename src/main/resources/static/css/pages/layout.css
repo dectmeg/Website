@@ -1,0 +1,37 @@
+.dropdown-submenu {
+          position: relative;
+        }
+
+        .dropdown-submenu .dropdown-menu {
+          top: 10%;
+          right: 100%;
+          margin-top: -1px;
+        }
+
+        .navbar-nav li:hover > ul.dropdown-menu {
+            display: block;
+            position: absolute;
+        }
+
+
+        .clients-slider .swiper-slide img {
+          border: 2px solid #ccc;
+          border-radius: 10px;
+          width: 250px;
+          height: 80px;
+          background-color:white;
+          object-fit: scale-down;
+          padding: 10px
+        }
+        .nav-gradient{
+            background: rgb(237,114,133);
+            background: linear-gradient(90deg, rgba(237,114,133,1) 25%, rgba(44,72,190,1) 70%);
+        }
+
+        .clients{
+        background-color:#f3f3f3;
+        }
+
+        .main-container{
+            min-height: 500px;
+        }

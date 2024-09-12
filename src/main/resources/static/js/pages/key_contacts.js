@@ -1,16 +1,21 @@
 $(document).ready(function() {
 
+    function obfuscateEmail(email) {
+        return email.replace(/@/g, '[at]').replace(/\./g, '[dot]');
+    }
+
     function populateContactsTable(contactsList) {
         var tableBody = $('#contactsTableBody');
         tableBody.empty(); // Clear existing rows
 
-        $.each(contactsList, function(index, contacts) {
+        $.each(contactsList, function(index, contact) {
+            var obfuscatedEmail = obfuscateEmail(contact.email);
             var row = '<tr>' +
                 '<td>' + (index + 1) + '</td>' +
-                '<td>' + contacts.nameAndDesignation + '</td>' +
-                '<td>' + contacts.officeNumber + '</td>' +
-                '<td>' + contacts.mobileNumber + '</td>' +
-                '<td>' + contacts.email + '</td>' +
+                '<td>' + contact.nameAndDesignation + '</td>' +
+                '<td>' + contact.officeNumber + '</td>' +
+                '<td>' + contact.mobileNumber + '</td>' +
+                '<td>' + obfuscatedEmail + '</td>' +
             '</tr>';
             tableBody.append(row);
         });
@@ -30,4 +35,3 @@ $(document).ready(function() {
     }
     fetchContactsData();
 });
-

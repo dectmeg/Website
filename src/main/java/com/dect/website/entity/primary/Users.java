@@ -35,6 +35,16 @@ public class Users {
                     name = "role_id", referencedColumnName = "id"))
     private Set<Roles> roles;
 
+
+    @Transient
+    private String captcha;
+
+    @Transient
+    private String hiddenCaptcha;
+
+    @Transient
+    private String realCaptcha;
+
     @PrePersist
     public void onCreate() {
         Calendar cal = Calendar.getInstance();

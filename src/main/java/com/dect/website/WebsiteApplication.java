@@ -17,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.dect.website")
 public class WebsiteApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

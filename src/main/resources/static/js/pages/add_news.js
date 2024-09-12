@@ -2,22 +2,18 @@ $(document).ready(function() {
     const token = $("meta[name='_csrf']").attr("content");
     const header = $("meta[name='_csrf_header']").attr("content");
 
-
     function populateNewsTypeDropdown() {
         var newsTypeSelect = $('#newsType');
-
 
         $.ajax({
             url: '/news/types',
             method: 'GET',
             success: function(response) {
-
                 newsTypeSelect.append($('<option></option>')
                     .attr('value', '')
                     .text('- Select News Type - ')
                     .prop('disabled', true)
                     .prop('selected', true));
-
 
                 response.forEach(function(newsType) {
                     newsTypeSelect.append($('<option></option>')
@@ -31,11 +27,9 @@ $(document).ready(function() {
         });
     }
 
-
     populateNewsTypeDropdown();
 
     $("#save-news").click(function() {
-
         var form = $("#addNewsForm")[0];
 
         if (form.checkValidity() === false) {
@@ -43,29 +37,20 @@ $(document).ready(function() {
             return;
         }
 
-        // Validate the attachment is a PDF
-            var attachment = $("#attachment")[0].files[0];
-            if (attachment && attachment.type !== "application/pdf") {
+        var attachment = $("#attachment")[0].files[0];
+        if (attachment) {
+            if (attachment.type !== "application/pdf") {
                 alert("Please upload a PDF file.");
                 return;
             }
-
-
-        var title = $("#title").val();
-        var description = $("#description").val();
-
-        var startDate = $("#startDate").val();
-        var endDate = $("#endDate").val();
-
-
-
-        var attachment = $("#attachment")[0].files[0];
-        var newsType = $('#newsType option:selected').val();
-        var whatsNew = $("#whatsNew").is(":checked");
+            if (attachment.size > 10 * 1024 * 1024) {
+                alert("File size must be less than 10MB.");
+                return;
+            }
+        }
 
         var formData = new FormData($("#addNewsForm")[0]);
-
-        formData.set('whatsNew', whatsNew ? "true" : "false");
+        formData.set('whatsNew', $("#whatsNew").is(":checked") ? "true" : "false");
 
         $.ajax({
             type: "POST",
@@ -78,24 +63,22 @@ $(document).ready(function() {
                 request.setRequestHeader(header, token);
             },
             success: function(response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'News Saved Successfully!',
-                    showConfirmButton: true,
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-
-                                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-                                            window.location.reload();
-                                        }
-                                    });
-                                },
+                $.confirm({
+                    title: 'Success!',
+                    content: 'News Saved Successfully!',
+                    type: 'green',
+                    buttons: {
+                        ok: function() {
+                            window.location.reload();
+                        }
+                    }
+                });
+            },
             error: function(error) {
-                console.error('Error adding news:', error.responseText);
-                Swal.fire({
-                    icon: 'error',
+                $.alert({
                     title: 'Error!',
-                    text: 'Failed to save news. Please try again.',
+                    content: error.responseText,
+                    type: 'red'
                 });
             }
         });
@@ -110,7 +93,6 @@ $(document).ready(function() {
         height: 100,
     });
 
-
     function populateNewsTable(newsList) {
         var tableBody = $('#newsTableBody');
         tableBody.empty(); // Clear existing rows
@@ -123,7 +105,7 @@ $(document).ready(function() {
                 '<td>' + news.description + '</td>' +
                 '<td>' + news.uploadDate + '</td>' +
                 '<td>' +
-                    (news.attachmentName ? '<a class="btn btn-success" href="' + getAttachmentUrl(news.id) + '" target="_blank">View</a>' : 'No Attachment') +
+                    (news.attachmentName ? '<a class="btn btn-success" href="' + getAttachmentUrl(news.id) + '" target="_blank" rel="noopener noreferrer">View</a>' : 'No Attachment') +
                 '</td>' +
                 '<td><button class="btn btn-danger delete-news" data-news-id="' + news.id + '"><i class="fa fa-trash"></i></button></td>' +
             '</tr>';
@@ -150,61 +132,49 @@ $(document).ready(function() {
 
     fetchNewsData();
 
-
     $('#newsTableBody').on('click', '.delete-news', function() {
         var newsId = $(this).data('news-id');
         deleteNews(newsId);
     });
-});
 
-
-function deleteNews(newsId) {
-    const token = $("meta[name='_csrf']").attr("content");
-    const header = $("meta[name='_csrf_header']").attr("content");
-
-
-    Swal.fire({
-        title: 'Are you sure?',
-        text: 'You won\'t be able to revert this!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-
-            $.ajax({
-                url: '/news/delete/' + newsId,
-                type: 'POST',
-                beforeSend: function(request) {
-                    request.setRequestHeader(header, token);
+    function deleteNews(newsId) {
+        $.confirm({
+            title: 'Are you sure?',
+            content: 'You won\'t be able to revert this!',
+            type: 'red',
+            buttons: {
+                confirm: {
+                    text: 'Yes, delete it!',
+                    btnClass: 'btn-red',
+                    action: function() {
+                        $.ajax({
+                            url: '/news/delete/' + newsId,
+                            type: 'POST',
+                            beforeSend: function(request) {
+                                request.setRequestHeader(header, token);
+                            },
+                            success: function(response) {
+                                $.alert({
+                                    title: 'Deleted!',
+                                    content: 'The news item has been deleted.',
+                                    type: 'green'
+                                });
+                                window.location.reload();
+                            },
+                            error: function(xhr, status, error) {
+                                $.alert({
+                                    title: 'Error!',
+                                    content: 'Failed to delete the news item. Please try again later.',
+                                    type: 'red'
+                                });
+                            }
+                        });
+                    }
                 },
-                success: function(response) {
-
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: 'The news item has been deleted.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then((result) => {
-
-                        if (result.isConfirmed || result.dismiss === Swal.DismissReason.backdrop) {
-                            window.location.reload();
-                        }
-                    });
-                },
-                error: function(xhr, status, error) {
-
-                    Swal.fire({
-                        title: 'Error!',
-                        text: 'Failed to delete the news item. Please try again later.',
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
+                cancel: function() {
+                    // Do nothing
                 }
-            });
-        }
-    });
-
-}
+            }
+        });
+    }
+});

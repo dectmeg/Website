@@ -36,7 +36,17 @@
             <artifactId>spring-boot-devtools</artifactId>
             <version>3.1.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>cn.apiclub.tool</groupId>
+            <artifactId>simplecaptcha</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.camel.springboot/camel-tika-starter -->
+        <dependency>
+            <groupId>org.apache.camel.springboot</groupId>
+            <artifactId>camel-tika-starter</artifactId>
+            <version>3.11.3</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
         <dependency>
