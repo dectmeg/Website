@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class KeyContactOrderDTO {
     private Long id;
-    private int order;
+    private Long order;
 }

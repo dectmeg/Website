@@ -1,6 +1,8 @@
 $(document).ready(function() {
-    $("#contactsTableBody").sortable();
-    $("#contactsTableBody").disableSelection();
+	
+    //$("#contactsTableBody").sortable();
+    //$("#contactsTableBody").disableSelection();
+    var contactsList;
 
     $("#save-contact").click(function() {
         var name = $("#nameAndDesignation").val();
@@ -60,6 +62,9 @@ $(document).ready(function() {
                 '<td>' + contacts.officeNumber + '</td>' +
                 '<td>' + contacts.mobileNumber + '</td>' +
                 '<td>' + contacts.email + '</td>' +
+                '<td><button class="btn btn-warning up-contact" data-order-number="' + contacts.orderNumber + '"><i class="fa fa-arrow-up"></i></button> ' +
+                	'<button class="btn btn-info down-contact" data-order-number="' + contacts.orderNumber + '"><i class="fa fa-arrow-down"></i></button>'+
+                '</td>' +
                 '<td><button class="btn btn-danger delete-contact" data-contact-id="' + contacts.id + '"><i class="fa fa-trash"></i></button></td>' +
             '</tr>';
             tableBody.append(row);
@@ -71,6 +76,7 @@ $(document).ready(function() {
             url: '/key-contacts/all',
             method: 'GET',
             success: function(response) {
+				contactsList = response;
                 populateContactsTable(response);
             },
             error: function() {
@@ -85,6 +91,36 @@ $(document).ready(function() {
         var contactId = $(this).data('contact-id');
         deleteContact(contactId);
     });
+    
+    $('#contactsTableBody').on('click', '.up-contact', function() {
+		var index = $(this).data('order-number');
+
+		var targetContact = contactsList[index];
+		var affectedContact = contactsList[index-1];
+		
+        contactsList[index].orderNumber = index-1;
+        contactsList[index-1].orderNumber = index;
+        
+        contactsList[index-1] = targetContact;
+        contactsList[index] = affectedContact;
+        
+        populateContactsTable(contactsList);
+    });
+    
+    $('#contactsTableBody').on('click', '.down-contact', function() {
+		var index = $(this).data('order-number');
+		
+		var targetContact = contactsList[index];
+		var affectedContact = contactsList[index+1];
+		
+        contactsList[index].orderNumber = index+1;
+        contactsList[index+1].orderNumber = index;
+        
+        contactsList[index+1] = targetContact;
+        contactsList[index] = affectedContact;
+        
+        populateContactsTable(contactsList);
+    });
 
     $("#saveOrder").click(function() {
         var order = [];
@@ -92,7 +128,7 @@ $(document).ready(function() {
             var contactId = $(element).find(".delete-contact").data("contact-id");
             order.push({
                 id: contactId,
-                order: index + 1
+                order: index
             });
         });
 
