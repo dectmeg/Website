@@ -36,9 +36,9 @@ public class KeyContactsController {
         return ResponseEntity.ok("Contact deleted successfully");
     }
 
-//    @PostMapping("/secure/key-contacts/reorder")
-//    public ResponseEntity<String> reorderKeyContacts(@RequestBody List<KeyContactOrderDTO> keyContactOrders) {
-//        keyContactService.reorderKeyContacts(keyContactOrders);
-//        return ResponseEntity.ok("Order updated successfully");
-//    }
+    @PostMapping("/secure/key-contacts/reorder")
+    public ResponseEntity<String> reorderKeyContacts(@RequestBody List<KeyContactOrderDTO> keyContactOrders) {
+        keyContactService.reorderKeyContacts(keyContactOrders);
+        return ResponseEntity.ok("Order updated successfully");
+    }
 }

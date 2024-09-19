@@ -16,26 +16,28 @@ public class KeyContactsService {
     private KeyContactsRepository keyContactRepository;
 
     public void saveKeyContacts(KeyContacts keyContacts) {
+    	
+    	keyContacts.setOrderNumber(keyContactRepository.getMaxOrderNumber()+1);
         keyContactRepository.save(keyContacts);
     }
 
     public Iterable<KeyContacts> getAllKeyContacts() {
-        return keyContactRepository.findAll();
+        return keyContactRepository.findAllByOrderByOrderNumberAsc();
     }
 
     public void deleteKeyContact(Long id){
          keyContactRepository.deleteById(id);
     }
 
-//    @Transactional
-//    public void reorderKeyContacts(List<KeyContactOrderDTO> keyContactOrders) {
-//        for (KeyContactOrderDTO keyContactOrder : keyContactOrders) {
-//            KeyContacts contact = keyContactRepository.findById(keyContactOrder.getId()).orElseThrow(
-//                    () -> new IllegalArgumentException("Invalid key contact ID: " + keyContactOrder.getId())
-//            );
-//            // Assuming there's an 'order' field in KeyContacts entity to store the order value
-//            contact.setOrder(keyContactOrder.getOrder());
-//            keyContactRepository.save(contact);
-//        }
-//    }
+    @Transactional
+    public void reorderKeyContacts(List<KeyContactOrderDTO> keyContactOrders) {
+        for (KeyContactOrderDTO keyContactOrder : keyContactOrders) {
+            KeyContacts contact = keyContactRepository.findById(keyContactOrder.getId()).orElseThrow(
+                    () -> new IllegalArgumentException("Invalid key contact ID: " + keyContactOrder.getId())
+            );
+            // Assuming there's an 'order' field in KeyContacts entity to store the order value
+            contact.setOrderNumber(keyContactOrder.getOrder());
+            keyContactRepository.save(contact);
+        }
+    }
 }

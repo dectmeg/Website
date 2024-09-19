@@ -15,6 +15,9 @@ public class KeyContacts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "order_number")
+    private Long orderNumber;
+    
     @Column(name = "name_and_designation")
     private String nameAndDesignation;
 
