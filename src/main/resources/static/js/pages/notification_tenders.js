@@ -87,8 +87,9 @@ function fetchAndPopulateNotifications(notificationTypeId, containerId) {
         var notificationItem = '<div class="mb-3 row align-items-center">' +
                         '<div class="col">' +
                             '<h6 class="fw-semibold mb-0">' +
+                                '<span class="fw-bold me-2">' + notification.title + '</span>' +
                                 '<span class="badge rounded-pill bg-secondary me-2">' + formattedDate + '</span>' +
-                                '<span class="badge rounded-pill bg-secondary me-2">' + notification.title + '</span>' +
+
                             '</h6>' +
                         '</div>';
 

@@ -32,13 +32,15 @@ import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWrite
 public class SecurityConfig {
 
     String cspstring = "default-src 'self';" +
-            "style-src 'self';" +
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;" +
+            "style-src-elem 'self' https://fonts.googleapis.com;" +
             "media-src 'self';" +
             "child-src 'self' https://www.google.com/;" +
             "base-uri 'self';" +
             "object-src 'self';" +
-            "font-src 'self' https://fonts.gstatic.com;" +
+            "font-src 'self' https://fonts.gstatic.com data:;" +
             "img-src 'self' data:;";
+
 
 
     @Autowired
