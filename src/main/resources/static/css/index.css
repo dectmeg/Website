@@ -5,7 +5,7 @@
        align-items: center;
        flex-wrap: wrap;
        height: 100vh;
-       font-family: "Open Sans";
+       font-family: "Roboto";
      }
 
      .education {
@@ -131,4 +131,11 @@
        left: 50px;
        z-index: 0;
        transition: transform 0.3s ease-out;
+     }
+
+     .itiLogo{
+        width: 45%;
+     }
+     .skillLogo{
+        width:85%;
      }
