@@ -87,7 +87,7 @@ function fetchAndPopulateNotifications(notificationTypeId, containerId) {
         var notificationItem = '<div class="mb-3 row align-items-center">' +
                         '<div class="col">' +
                             '<h6 class="fw-semibold mb-0">' +
-                                '<span class="fw-bold me-2">' + notification.title + '</span>' +
+                                '<span class="fw-bold me-2"><a href="' + getAttachmentUrl(notification.id) + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-primary">' + notification.title + '</a></span>' +
                                 '<span class="badge rounded-pill bg-secondary me-2">' + formattedDate + '</span>' +
 
                             '</h6>' +
@@ -118,7 +118,7 @@ function fetchAndPopulateNotifications(notificationTypeId, containerId) {
                         '</div>';
         }
 
-        notificationItem += '</div><div class="col-12"><p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(notification.id) + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-primary">' + notification.description + '</a></p></div><hr>';
+        notificationItem += '</div><div class="col-12"><p class="mb-0 mt-1 small">' + notification.description + '</p></div><hr>';
         notificationContainer.append(notificationItem);
     });
 }
