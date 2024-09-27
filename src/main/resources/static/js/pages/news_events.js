@@ -88,7 +88,7 @@ function fetchAndPopulateNews(newsTypeId, containerId) {
         var newsItem = '<div class="mb-3 row align-items-center">' +
                         '<div class="col">' +
                             '<h6 class="fw-semibold mb-0">' +
-                                '<span class="fw-bold me-2">' + news.title + '</span>' +
+                                '<span class="fw-bold me-2"><a href="' + getAttachmentUrl(news.id) + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-primary">' + news.title + '</a></span>' +
                                 '<span class="badge rounded-pill bg-secondary me-2">' + formattedDate + '</span>' +
 
                             '</h6>' +
@@ -119,7 +119,7 @@ function fetchAndPopulateNews(newsTypeId, containerId) {
                         '</div>';
         }
 
-        newsItem += '</div><div class="col-12"><p class="mb-0 mt-1 small"><a href="' + getAttachmentUrl(news.id) + '" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-primary">' + news.description + '</a></p></div><hr>';
+        newsItem += '</div><div class="col-12"><p class="mb-0 mt-1 small">' + news.description + '</p></div><hr>';
         newsContainer.append(newsItem);
     });
 }

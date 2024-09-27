@@ -59,6 +59,7 @@ public class SecurityConfig {
                                 .requestMatchers("/**").permitAll()
                                 .requestMatchers("/employment_services/**").permitAll()
                                 .requestMatchers("/static/**").permitAll()
+                                .requestMatchers("/static/css/pages/**").permitAll()
                                 .requestMatchers("/","/refresh-captcha","/access-denied").permitAll()
                 )
                 .formLogin(login ->
