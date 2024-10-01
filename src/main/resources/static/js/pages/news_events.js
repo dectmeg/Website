@@ -119,7 +119,7 @@ function fetchAndPopulateNews(newsTypeId, containerId) {
                         '</div>';
         }
 
-        newsItem += '</div><div class="col-12"><p class="mb-0 mt-1 small">' + news.description + '</p></div><hr>';
+        newsItem += '</div><div class="col-12"><small class="mb-0 mt-1 text-secondary">' + news.description + '</small></div><hr>';
         newsContainer.append(newsItem);
     });
 }

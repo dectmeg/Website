@@ -11,13 +11,13 @@ $(document).ready(function() {
             var newsItem = '<div class="mb-3">' +
                 '<div class="row">' +
                 '<div class="col">' +
-                '<h6 class="fw-semibold mb-0 text-secondary">' + news.title + '</h6>' +
+                '<h6 class="fw-semibold mb-0"><a href="' + getAttachmentUrlForNews(news.id) + '" target="_blank" class="text-decoration-none">' + news.title + '</a></h6>' +
                 '</div>' +
                 '<div class="col text-end">' +
                 '<p class="text-muted fs-6 mb-0">' + formattedDate + '</p>' +
                 '</div>' +
                 '</div>' +
-                '<p class="mb-0 mt-1 small"><a href="' + getAttachmentUrlForNews(news.id) + '" target="_blank" class="text-decoration-none text-primary">' + news.description + '</a></p>' +
+                '<small class="mb-0 mt-1 text-secondary">' + news.description + '</small>' +
                 '</div> <hr>';
 
             newsContainer.append(newsItem);
@@ -56,13 +56,13 @@ $(document).ready(function() {
             var notificationItem = '<div class="mb-3">' +
                 '<div class="row">' +
                 '<div class="col">' +
-                '<h6 class="fw-semibold mb-0 text-secondary">' + notification.title + '</h6>' +
+                '<h6 class="fw-semibold mb-0"><a href="' + getAttachmentUrlForNotifications(notification.id) + '" target="_blank" class="text-decoration-none">' + notification.title + '</a></h6>' +
                 '</div>' +
                 '<div class="col text-end">' +
                 '<p class="text-muted fs-6 mb-0">' + formattedDate + '</p>' +
                 '</div>' +
                 '</div>' +
-                '<p class="mb-0 mt-1 small"><a href="' + getAttachmentUrlForNotifications(notification.id) + '" target="_blank" class="text-decoration-none text-primary">' + notification.description + '</a></p>' +
+                '<small class="mb-0 mt-1 small text-secondarytext-secondary">' + notification.description + '</small>' +
                 '</div> <hr>';
 
             notificationContainer.append(notificationItem);
