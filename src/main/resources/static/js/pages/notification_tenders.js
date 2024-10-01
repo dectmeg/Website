@@ -118,7 +118,7 @@ function fetchAndPopulateNotifications(notificationTypeId, containerId) {
                         '</div>';
         }
 
-        notificationItem += '</div><div class="col-12"><p class="mb-0 mt-1 small">' + notification.description + '</p></div><hr>';
+        notificationItem += '</div><div class="col-12"><small class="mb-0 mt-1 text-secondary">' + notification.description + '</small></div><hr>';
         notificationContainer.append(notificationItem);
     });
 }
